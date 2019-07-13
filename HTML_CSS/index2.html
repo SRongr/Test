@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>红包模拟器</title>
+  <style>
+    .wrapper {
+      position: relative;
+      width: 375px;
+      height: 667px;
+      border: 1px solid #333333;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+    }
+    .title {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+
+    }
+    .input-wrapper {
+      flex-grow: 1
+    }
+    .input-wrapper .num {
+      padding-bottom: 20px;
+    }
+    /* .input-name {
+      width: 100px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    } */
+    .item-input {
+      display: flex;
+      /* flex: 1; */
+    }
+    .item-input .input-name{
+      flex: 2;
+      white-space: nowrap;
+      overflow: hidden;
+      display: flex;
+      /* justify-content: space-between; */
+      text-align:justify;
+    }
+    .item-input input{
+      flex: 2;
+      margin: 0 5px;
+    }
+    .bottom {
+      flex-grow: 3;
+      
+    }
+    .bottom .button {
+      width: 150px;
+      height: 30px;
+      border-radius: 5px;
+      background-color: #519bc8;
+      color: #ffffff;
+      /* text-align: center; */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .gray {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      background-color: gray;
+      opacity: 0.4;
+      display: none;
+    }
+    .gray .content {
+      width: 80%;
+      margin:0 auto;
+      height: 80%;
+      background-color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="title">
+      <h1>红包模拟器</h1>
+    </div>
+    <div class="input-wrapper">
+      <div class="num item-input">
+        <span class="input-name">红包个数: </span>
+        <input type="text" id="num"> 个
+      </div>
+      <div class="money item-input">
+        <span class="input-name">总&ensp;金&ensp;额: </span>
+        <input type="text" id="yuan"> 元
+      </div>
+    </div>
+    <div class="bottom">
+      <div class="button">发红包</div>
+    </div>
+    <div class="gray">
+      <div class="content">
+        <div class="close"></div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    const SBtn = document.getElementsByClassName('button')[0]
+    const Ogray = document.getElementsByClassName('gray')[0]
+    SBtn.onclick = function () {
+      Ogray.style.display = 'block'
+    }
+    const t = 1
+    // for (var i = 0 ; i < t; i ++) {
+    //   const temp = [124272371505,14857869176,3504489017,5415377887]
+    //   const n = Number(temp[0])
+    //   const k = Number(temp[1])
+    //   const d1 = Number(temp[2])
+    //   const d2 = Number(temp[3])
+    // //  var x = 0, y = d1, z = d2 + d1;
+    //   var x = d1 , y = 0, z = 0 - d2
+    //   var c = n - k
+    //   console.log(c)
+    //   const arr = [x, y, z]
+    //   // while(c) {
+    //   //   arr.sort((a,b)=> a-b)
+    //   //   arr[0] = arr[0] + 1
+    //   //   c -- 
+    //   // }
+    //   if (arr[0] == arr[1] && arr[1] == arr[2]) {
+    //     console.log('yes')
+    //   } else {
+    //     console.log('no')
+    //   }
+    // }
+
+function main(n, k, d1, d2) {
+ 
+    var res = calcXYZ(k, d1, d2, 1, 1)
+    if (test()) {
+        return true
+    }
+    var res = calcXYZ(k, d1, d2, 1, -1)
+    if (test()) {
+        return true
+    }
+    var res = calcXYZ(k, d1, d2, -1, 1)
+    if (test()) {
+        return true
+    }
+ 
+    var res = calcXYZ(k, d1, d2, -1, -1)
+    if (test()) {
+        return true
+    }
+    return false
+ 
+    function test() {
+        if (res === false) return false
+        var arr = [res.x, res.y, res.z]
+        arr.sort(function(a, b) {
+            return a - b
+        })
+        var min = arr[0]
+        var mid = arr[1]
+        var max = arr[2]
+ 
+        var distance = max - min + max - mid
+        var remain = n - k
+        if ((remain - distance >= 0) && (remain - distance) % 3 === 0) {
+            return true
+        } else {
+            return false
+        }
+}
+}
+function calcXYZ(k, d1, d2, isXMoreThanY, isYMoreThanZ) {
+    var x = y + isXMoreThanY * d1
+    var y = (k + isYMoreThanZ * d2 - isXMoreThanY * d1) / 3
+    var z = y - isYMoreThanZ * d2
+ 
+    if (!isNotNegativeInteger(x) || !isNotNegativeInteger(x) || !isNotNegativeInteger(x)) {
+        return false
+    } else {
+        return {
+            x: x,
+            y: y,
+            z: z
+        }
+    }
+}
+//是否为非负整数 
+function isNotNegativeInteger(num) {
+    if (typeof(num) !== "number") return false
+    if (num < 0) return false
+    if (num % 1 !== 0) return false
+    return true
+}
+ 
+var num = parseInt(readline())
+
+for (var x = 0; x < num; x++) {
+    var arr = readline().split(" ")
+    for (var i = 0; i < arr.length; i++) {
+        arr[i] = parseInt(arr[i])
+    }
+    var out = main(arr[0], arr[1], arr[2], arr[3])
+    if (out) {
+        console.log("yes")
+    } else {
+        console.log("no")
+    }
+  } 
+  </script>
+  <script src="index2.js"></script>
+</body>
+</html>
