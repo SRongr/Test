@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script src="promise.js"></script>
+  <script>
+    /**
+     * 体验原生promise
+     */
+
+    // executor 同步执行
+    // res rej
+    // pending 出发rejected resolved
+    // var op = new MyPromise((res, rej) => {
+    //   setTimeout(() => {
+    //     res(1)
+    //     // console.log(0)
+    //   }, 100)
+    // })
+    // op.then((val) => {
+    //   return new MyPromise((res, rej) => {
+    //     rej(val + 1)
+    //   })
+    // }, (reason) => {
+    //   console.log(reason)
+    //   return 'err'
+    // }).then((val) => {
+    //   console.log(val, 'ok2')
+    // }, err => {
+    //   console.log(err, 'err')
+    // })
+    // console.log('bottom')
+
+    function test(delay, val) {
+      return new MyPromise((res, rej) => {
+        setTimeout(() => {
+          if (val > 'c') {
+            rej(val)
+          } else {
+            res(val)
+          }
+        }, delay)
+      })
+    }
+    // MyPromise.race([test(200,'a'), test(300, 'b'), test(100, 'c')]).then(val => {
+    //   console.log('ok', val)
+    // }, reason => {
+    //   console.log('no', reason)
+    // })
+    MyPromise.all([test(200,'a'), test(300, 'b'), test(100, 'c')]).then(val => {
+      console.log('ok', val)
+    }, reason => {
+      console.log('no', reason)
+    })
+  </script>
+</body>
+</html>
